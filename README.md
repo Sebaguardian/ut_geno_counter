@@ -4,7 +4,7 @@ Terminal counter for kills during Genocide route in Undertale
 
 ![usage](usage.gif)
 
-Pair it with [flitter](https://github.com/alexozer/flitter) and [input overlay](https://github.com/univrsal/input-overlay) to have full layout
+Pair it with [flitter](https://github.com/alexozer/flitter) or [obs-livesplit-one](https://github.com/LiveSplit/obs-livesplit-one) and [input overlay](https://github.com/univrsal/input-overlay) to have full layout
 
 ## Usage
 
