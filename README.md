@@ -19,6 +19,8 @@ Pair it with [flitter](https://github.com/alexozer/flitter) or [obs-livesplit-on
 
 > [!NOTE]
 >
+> This script probably won't work on wayland.
+>
 > If your inputs  don't get registred use `xinput list` to find your keyboard input and change value of `DEVICE_ID` to the given number.
 >
 > If box isn't displayed, press any button to make it appear.

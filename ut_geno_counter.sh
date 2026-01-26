@@ -20,7 +20,7 @@ KEY_S="39"       # alt to MINUS
 KEY_A="38"       # alt to PLUS
 KEY_Q="24"       # alt to DELETE
 
-KILL_COUNTER=0
+KILL_COUNTER=100
 
 # set up
 tput smcup #alt screen
@@ -30,10 +30,8 @@ repeat_delay=$(xset q | grep "repeat delay:" | awk '{print $4}')
 repeat_rate=$(xset q  | grep "repeat rate:"  | awk '{print $7}')
 xset r rate 600 10 # repeat prevention
 
-# Monitor input events
-xinput test $DEVICE_ID | while read line; do
 
-    draw_box() {
+draw_box() {
      clear
 
      local RED=$(tput setaf 1; echo "   ")
@@ -41,17 +39,17 @@ xinput test $DEVICE_ID | while read line; do
      local YELLOW=$(tput setaf 3)
 
      # Can't have negative kills (shut up Napstablook)
-     if (( $KILL_COUNTER < 0 )); then
+     if (( KILL_COUNTER < 0 )); then
           KILL_COUNTER=0
      fi
 
      # Bigger number offset
-     if (( $KILL_COUNTER >= 10 )); then
-         local RED=$(tput setaf 1; echo "  ")
-    
+     if (( KILL_COUNTER >= 10 )); then
+         RED=$(tput setaf 1; echo "  ")
+
      #Doesn't work
-    # elif (( $KILL_COUNTER >= 100 )); then
-    #    local RED=$(tput setaf 1; echo " ")
+     # elif (( KILL_COUNTER >= 100 )); then
+     #   RED=$(tput setaf 1; echo " ")
      fi
 
      echo "┌────────────────────────┐"
@@ -65,11 +63,14 @@ xinput test $DEVICE_ID | while read line; do
 trap 'cleanup' SIGINT SIGTERM
 
     cleanup() {
-     xset r rate "$repeat_delay" "$repeat_rate" # restore key delay speed 
-     tput rmcup # exit alt screen
-     tput cnorm # make cursor visible again
-	 clear
+         xset r rate "$repeat_delay" "$repeat_rate" # restore key delay speed 
+         tput rmcup # exit alt screen
+         tput cnorm # make cursor visible again
+         clear
 }
+
+# Monitor input events
+xinput test $DEVICE_ID | while read line; do
 
     if echo "$line" | grep -q "key press"; then
         # Extract key code
@@ -77,20 +78,20 @@ trap 'cleanup' SIGINT SIGTERM
 
           case $KEYCODE in
 
-               $KEY_DELETE | $KEY_Q)
+               "$KEY_DELETE" | "$KEY_Q")
                        cleanup
                        exit 1
                        ;;
 
-               $KEY_PLUS | $KEY_A)
+               "$KEY_PLUS" | "$KEY_A")
                        (( KILL_COUNTER += 1 ))
                        ;;
 
-               $KEY_MINUS | $KEY_S)
+               "$KEY_MINUS" | "$KEY_S")
                        (( KILL_COUNTER -= 1 ))
                        ;;
 
-               $KEY_0 | $KEY_R)
+               "$KEY_0" | "$KEY_R")
                        KILL_COUNTER=0
                        ;;
         esac
